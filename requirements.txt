@@ -1,0 +1,10 @@
+# requirements.txt
+
+pandas
+numpy
+scikit-learn
+azure-storage-blob
+streamlit
+plotly
+requests
+python-dotenv
