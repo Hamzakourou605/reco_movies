@@ -2,7 +2,7 @@
 MyTflix - Application Streamlit de recommandation de films
 Interface Frontend avec données réelles et ML
 """
-
+import uvicorn
 import streamlit as st
 import pandas as pd
 import numpy as np
