@@ -1,5 +1,4 @@
 uvicorn
-gunicorn
 pandas
 numpy
 scikit-learn
@@ -7,6 +6,7 @@ azure-storage-blob
 requests
 python-dotenv
 fastapi
+gunicorn
 pydantic
 starlette
 plotly
