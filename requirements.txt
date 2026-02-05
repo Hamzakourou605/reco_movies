@@ -8,4 +8,5 @@ python-dotenv
 fastapi
 pydantic
 starlette
+plotly
 typing-extensions
