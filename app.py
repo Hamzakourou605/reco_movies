@@ -3,6 +3,7 @@ MyTflix - API FastAPI de recommandation de films
 Interface Backend avec ML
 Déploiement sur Azure App Service avec Uvicorn
 """
+
 from fastapi import FastAPI, HTTPException
 import pandas as pd
 import numpy as np
@@ -13,7 +14,7 @@ from datetime import datetime
 from pydantic import BaseModel
 from typing import List, Optional
 from contextlib import asynccontextmanager
-
+import uvicorn
 # Charger les variables d'environnement
 load_dotenv()
 
@@ -36,28 +37,28 @@ async def lifespan(app: FastAPI):
     """Gère le démarrage et l'arrêt de l'application"""
     # Démarrage - Charger le modèle
     global recommender
-    print("🚀 Démarrage de l'API MyTflix...")
-    print("📚 Chargement du modèle ML...")
+    print("Starting...")
+    print("Loading ML model...")
     
     model_path = 'recommender_model.pkl'
     
     # Entraîne le modèle s'il n'existe pas
     if not Path(model_path).exists():
-        print("📚 Entraînement du modèle (première utilisation)...")
+        print("Training model...")
         recommender = MovieRecommender()
         recommender.train()
         recommender.save(model_path)
-        print("✅ Modèle entraîné et sauvegardé!")
+        print("Finished training!")
     else:
         recommender = MovieRecommender.load(model_path)
-        print("✅ Modèle chargé!")
+        print("Loaded")
     
-    print("✅ API prête à recevoir des requêtes")
+    print("API ready")
     
     yield  # Application en cours d'exécution
     
     # Arrêt
-    print("🛑 Arrêt de l'API MyTflix...")
+    print("Stopping...")
 
 # ============================================================================
 # INITIALISATION FASTAPI
@@ -132,7 +133,7 @@ class APIResponse(BaseModel):
 # ============================================================================
 
 @app.get("/", tags=["Accueil"])
-async def read_root():
+async def root():
     """Route racine de l'API - Statut et documentation"""
     return {
         "message": "MyTflix API - Système de recommandation de films",
@@ -390,13 +391,3 @@ async def recommend_by_title(movie_title: str, n: int = 10):
         raise HTTPException(status_code=400, detail=f"Erreur: {str(e)}")
     """Charge les statistiques en cache"""
     return MovieStatistics(recommender.movies, recommender.ratings, recommender.tags)
-
-
-# ============================================================================
-# POINT D'ENTRÉE DE L'APPLICATION
-# ============================================================================
-if __name__ == '__main__':
-    import uvicorn
-    # Démarrer le serveur
-    # Documentation API disponible sur: http://localhost:8000/docs
-    uvicorn.run(app, host='0.0.0.0', port=8000)
