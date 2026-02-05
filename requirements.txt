@@ -6,7 +6,6 @@ azure-storage-blob
 requests
 python-dotenv
 fastapi
-gunicorn
 pydantic
 starlette
 typing-extensions
